@@ -21,5 +21,5 @@ int main()
 
 	printf("DES Encryption: %u%u\n",in[0],in[1]);
 
-    	des_encrypt1(in,key,DEC);
+    des_encrypt1(in,key,DEC);
 }
