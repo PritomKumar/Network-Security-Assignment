@@ -46,7 +46,7 @@ int hex_to_ascii(char c, char d)
 unsigned char *hexToAsciiString(char *hexString)
 {
 	char *st = hexString;
-	unsigned char ascii[8];
+	static unsigned char ascii[8];
 	int length = strlen(st);
 	int i;
 	char buf = st[0];
@@ -63,9 +63,9 @@ unsigned char *hexToAsciiString(char *hexString)
 	// {
 	// 	printf("%c", ascii[i]);
 	// }
-	unsigned char *p;
-	p = ascii;
-	return p;
+	// printf("FUctions = %s\n",ascii);
+
+	return &ascii;
 }
 
 int main(int argc, char *argv[])
@@ -108,7 +108,24 @@ int main(int argc, char *argv[])
 	}
 	printf("\n");
 
-	unsigned char * iv = hexToAsciiString(argv[1]);
+	
+	char *st = argv[1];
+	unsigned char ascii[8];
+	int length = strlen(st);
+	int i;
+	char buf = st[0];
+	for (int i = 0, j = 0; i < length - 1; i += 2, j++)
+	{
+		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
+		ascii[j] = c;
+	}
+	// printf("\n");
+	// for (int i = 0; i < 8; i++)
+	// {
+	// 	printf("%c", ascii[i]);
+	// }
+	 
+
 	// 	int i=0;
 	// 	printf("\ncmdline args count=%d", argc);
 
@@ -118,6 +135,6 @@ int main(int argc, char *argv[])
 	// 	for (i=1; i< argc; i++) {
 	// 		printf("\narg%d=%s", i, argv[i]);
 	// 	}
-
+	unsigned char * iv = hexToAsciiString(argv[1]);
 	printf("%s\n",iv);
 }
