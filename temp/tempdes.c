@@ -76,6 +76,19 @@ int main(int argc, char *argv[])
 	unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned char * iv = hexToAsciiString(argv[1]);
 	unsigned char * desKey = hexToAsciiString(argv[2]);
+	char * readFileName = argv[3];
+	char * writeFileName = argv[4];
+	FILE *fp,*fp2;
+
+	char buff[10000];
+    fp = fopen(readFileName, "r");
+	fp2 = fopen(readFileName, "w+");
+
+	fscanf(fp, "%s", buff);
+    printf("\n1 : %s\n", buff );
+
+	fclose(fp);
+	fclose(fp2);
 
 	des_key_schedule key;
 
