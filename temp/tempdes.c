@@ -74,6 +74,8 @@ int main(int argc, char *argv[])
 	unsigned in[2];
 	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
 	unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
+	unsigned char * iv = hexToAsciiString(argv[1]);
+	unsigned char * desKey = hexToAsciiString(argv[2]);
 
 	des_key_schedule key;
 
@@ -97,6 +99,6 @@ int main(int argc, char *argv[])
 	printf("DES Decription: ");
 	printf("%s\n",input);
 
-	unsigned char * iv = hexToAsciiString(argv[1]);
+	
 	printf("%s\n",iv);
 }
