@@ -86,55 +86,17 @@ int main(int argc, char *argv[])
 	in[1] = 1231233;
 
 	printf("DES Clear Text: ");
-	for (int i = 0; i < 8; i++)
-	{
-		printf("%c", input[i]);
-	}
-	printf("\n");
+	printf("%s\n",input);
+
 	des_encrypt1(input, key, ENC);
 
 	printf("DES Encryption: ");
-	for (int i = 0; i < 8; i++)
-	{
-		printf("%c", input[i]);
-	}
-	printf("\n");
+	printf("%s\n",input);
 
 	des_encrypt1(input, key, DEC);
 	printf("DES Decription: ");
-	for (int i = 0; i < 8; i++)
-	{
-		printf("%c", input[i]);
-	}
-	printf("\n");
+	printf("%s\n",input);
 
-	
-	char *st = argv[1];
-	unsigned char ascii[8];
-	int length = strlen(st);
-	int i;
-	char buf = st[0];
-	for (int i = 0, j = 0; i < length - 1; i += 2, j++)
-	{
-		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
-		ascii[j] = c;
-	}
-	// printf("\n");
-	// for (int i = 0; i < 8; i++)
-	// {
-	// 	printf("%c", ascii[i]);
-	// }
-	 
-
-	// 	int i=0;
-	// 	printf("\ncmdline args count=%d", argc);
-
-	//  /* First argument is executable name only */
-	// 	printf("\nexe name=%s", argv[0]);
-
-	// 	for (i=1; i< argc; i++) {
-	// 		printf("\narg%d=%s", i, argv[i]);
-	// 	}
 	unsigned char * iv = hexToAsciiString(argv[1]);
 	printf("%s\n",iv);
 }
