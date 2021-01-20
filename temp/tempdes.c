@@ -12,26 +12,26 @@ int hex_to_int(char c)
 	int dig = 0;
 	switch (c)
 	{
-	case 'A':
-		dig = 10;
-		break;
-	case 'B':
-		dig = 11;
-		break;
-	case 'C':
-		dig = 12;
-		break;
-	case 'D':
-		dig = 13;
-		break;
-	case 'E':
-		dig = 14;
-		break;
-	case 'F':
-		dig = 15;
-		break;
-	default:
-		dig = c - 0x30;
+		case 'A':
+			dig = 10;
+			break;
+		case 'B':
+			dig = 11;
+			break;
+		case 'C':
+			dig = 12;
+			break;
+		case 'D':
+			dig = 13;
+			break;
+		case 'E':
+			dig = 14;
+			break;
+		case 'F':
+			dig = 15;
+			break;
+		default:
+			dig = c - 0x30;
 	}
 	return dig;
 }
