@@ -104,10 +104,11 @@ int main(int argc, char *argv[])
 
 	char xor[8];
 	int temp[8];
-	int i;
+	int startPoint = 0;
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned char input[8];
-	for (int i = 0; i < LENGTH; i++)
+	unsigned char testKey[8] = "Pritom19";
+	for (int i = startPoint; i < LENGTH; i++)
 	{
 		input[i] = buff[i];
 	}
@@ -118,7 +119,7 @@ int main(int argc, char *argv[])
 		temp[i] = (int)xor[i];
 	}
 
-	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", desKey, input);
+	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", iv, input);
 	for (int i = 0; i < LENGTH; i++)
 	{
 		printf("%c", xor[i]);
@@ -132,7 +133,7 @@ int main(int argc, char *argv[])
 
 	des_key_schedule key;
 
-	if ((k = des_set_key_checked(&desKey, key)) != 0)
+	if ((k = des_set_key_checked(&testKey, key)) != 0)
 	{
 		printf("\nkey error\n");
 	}
@@ -140,13 +141,18 @@ int main(int argc, char *argv[])
 	printf("DES Clear Text: ");
 	printf("%s\n", input);
 
-	des_encrypt1(input, key, ENC);
-
+	des_encrypt1(xor, key, ENC);
+	fprintf(fp2,"%s",xor);
 	printf("DES Encryption: ");
-	printf("%s\n", input);
+	printf("%s\n", xor);
+	for (int i = 0; i < LENGTH; i++)
+	{
+		printf("%hhx", xor[i]);
+	}
+	printf("\n");
 
 	des_encrypt1(input, key, DEC);
-	printf("DES Decription: ");
+	printf("DES Decryption: ");
 	printf("%s\n", input);
 
 	printf("%s\n", iv);
