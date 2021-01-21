@@ -82,7 +82,8 @@ int main(int argc, char *argv[])
 	unsigned in[2];
 	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
 	unsigned char iv[8];
-	hexToAsciiString(argv[1], iv);
+	//hexToAsciiString(argv[1], iv);
+	hexToAsciiString("3030303030303030", iv);
 	printf("IV = %s\n", iv);
 	// printf("After IV\n\n");
 	unsigned char desKey[8];
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
 	int startPoint = 0;
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned char input[8];
-	unsigned char testKey[8] = "Pritom19";
+	//unsigned char testKey[8] = "pritom19";
 	for (int i = startPoint; i < LENGTH; i++)
 	{
 		input[i] = buff[i];
@@ -133,7 +134,7 @@ int main(int argc, char *argv[])
 
 	des_key_schedule key;
 
-	if ((k = des_set_key_checked(&testKey, key)) != 0)
+	if ((k = des_set_key_checked(&desKey, key)) != 0)
 	{
 		printf("\nkey error\n");
 	}
