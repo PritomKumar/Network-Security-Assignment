@@ -30,6 +30,24 @@ int hex_to_int(char c)
 	case 'F':
 		dig = 15;
 		break;
+	case 'a':
+		dig = 10;
+		break;
+	case 'b':
+		dig = 11;
+		break;
+	case 'c':
+		dig = 12;
+		break;
+	case 'd':
+		dig = 13;
+		break;
+	case 'e':
+		dig = 14;
+		break;
+	case 'f':
+		dig = 15;
+		break;
 	default:
 		dig = c - 0x30;
 	}
@@ -52,11 +70,14 @@ unsigned char *hexToAsciiString(char *hexString, char *array)
 	unsigned char ascii[8];
 	unsigned char ascii2[8];
 	int length = strlen(st);
+	printf("length = %d\n\n",length);
 	// printf("Before for loop\n\n");
 
 	for (int i = 0, j = 0; i < length; i += 2, j++)
 	{
 		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
+		int temp = hex_to_ascii(st[i], st[i + 1]);
+		printf("c= %c  num= %hhx i = %d  j= %d\n",c,temp,i,j);
 		array[j] = c;
 	}
 	// printf("After for loop\n\n");
@@ -108,7 +129,7 @@ int main(int argc, char *argv[])
 	}
 	printf("\n");
 	for (i = 0; i < LENGTH; i++){
-		printf("%d", temp[i]);
+		printf("%hhx", temp[i]);
 	}
 		
 	printf("\n");
