@@ -61,28 +61,19 @@ int hex_to_ascii(char c, char d)
 	// printf("\nhigh = %d low = %d  \n", high, low);
 	return high + low;
 }
-unsigned char *hexToAsciiString(char *hexString, char *array)
+
+void hexToAsciiString(char *hexString, char *array)
 {
-
 	char *st = NULL;
-	// printf("Before st\n\n");
 	st = hexString;
-	unsigned char ascii[8];
-	unsigned char ascii2[8];
 	int length = strlen(st);
-	printf("length = %d\n\n",length);
-	// printf("Before for loop\n\n");
-
 	for (int i = 0, j = 0; i < length; i += 2, j++)
 	{
 		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
 		int temp = hex_to_ascii(st[i], st[i + 1]);
-		printf("c= %c  num= %hhx i = %d  j= %d\n",c,temp,i,j);
+		//printf("c= %c  num= %hhx i = %d  j= %d\n",c,temp,i,j);
 		array[j] = c;
 	}
-	// printf("After for loop\n\n");
-	// printf("ascii = %s\n", ascii);
-	return ascii;
 }
 
 int main(int argc, char *argv[])
@@ -90,7 +81,6 @@ int main(int argc, char *argv[])
 	int k;
 	unsigned in[2];
 	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
-	unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned char iv[8];
 	hexToAsciiString(argv[1], iv);
 	printf("IV = %s\n", iv);
@@ -111,32 +101,38 @@ int main(int argc, char *argv[])
 	//fprintf(fp2, "This is testing for fprintf...\n");
 
 	int LENGTH = 8;
-	const char plainone[16] = "PlainOne";
-	const char plaintwo[16] = "PlainTwo";
+
 	char xor[8];
 	int temp[8];
 	int i;
-
-	for (i = 0; i < LENGTH; ++i)
+	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
+	unsigned char input[8];
+	for (int i = 0; i < LENGTH; i++)
 	{
-		xor[i] = (char)(desKey[i] ^ input[i]);
+		input[i] = buff[i];
+	}
+
+	for (int i = 0; i < LENGTH; ++i)
+	{
+		xor[i] = (char)(iv[i] ^ input[i]);
 		temp[i] = (int)xor[i];
 	}
 
 	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", desKey, input);
-	for (i = 0; i < LENGTH; i++){
+	for (int i = 0; i < LENGTH; i++)
+	{
 		printf("%c", xor[i]);
 	}
 	printf("\n");
-	for (i = 0; i < LENGTH; i++){
+	for (int i = 0; i < LENGTH; i++)
+	{
 		printf("%hhx", temp[i]);
 	}
-		
 	printf("\n");
 
 	des_key_schedule key;
 
-	if ((k = des_set_key_checked(&cbc_key, key)) != 0)
+	if ((k = des_set_key_checked(&desKey, key)) != 0)
 	{
 		printf("\nkey error\n");
 	}
