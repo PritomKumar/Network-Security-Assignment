@@ -76,48 +76,27 @@ void hexToAsciiString(char *hexString, char *array)
 	}
 }
 
-int main(int argc, char *argv[])
-{
-	int k;
-	unsigned in[2];
-	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
-	unsigned char iv[8];
-	//hexToAsciiString(argv[1], iv);
-	hexToAsciiString("3030303030303030", iv);
-	printf("IV = %s\n", iv);
-	// printf("After IV\n\n");
-	unsigned char desKey[8];
-	hexToAsciiString(argv[2], desKey);
-	printf("desKey = %s\n", desKey);
-	char *readFileName = argv[3];
-	char *writeFileName = argv[4];
-	FILE *fp, *fp2;
+void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff){
+	
+	//printf("Inside func %s\n", desKey);
 
-	unsigned char buff[10000];
-	fp = fopen(readFileName, "r");
-	fp2 = fopen(writeFileName, "w+");
-
-	fscanf(fp, "%s", buff);
-	//  printf("\n1 : %s\n", buff );
-	//fprintf(fp2, "This is testing for fprintf...\n");
-
+	unsigned char *desKeyCopy  = NULL;
 	int LENGTH = 8;
 
 	char xor[8];
 	int temp[8];
-	int startPoint = 0;
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned char input[8];
 	//unsigned char testKey[8] = "pritom19";
-	for (int i = startPoint; i < LENGTH; i++)
+	for (int i = startPoint; i < startPoint + LENGTH; i++)
 	{
 		input[i] = buff[i];
+		temp[i] = input[i];
 	}
 
 	for (int i = 0; i < LENGTH; ++i)
 	{
 		xor[i] = (char)(iv[i] ^ input[i]);
-		temp[i] = (int)xor[i];
 	}
 
 	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", iv, input);
@@ -132,13 +111,6 @@ int main(int argc, char *argv[])
 	}
 	printf("\n");
 
-	des_key_schedule key;
-
-	if ((k = des_set_key_checked(&desKey, key)) != 0)
-	{
-		printf("\nkey error\n");
-	}
-
 	printf("DES Clear Text: ");
 	printf("%s\n", input);
 
@@ -152,11 +124,55 @@ int main(int argc, char *argv[])
 	}
 	printf("\n");
 
-	des_encrypt1(input, key, DEC);
-	printf("DES Decryption: ");
-	printf("%s\n", input);
+	CBC_Encription(startPoint+8,xor,fp2,key,buff);
 
-	printf("%s\n", iv);
+}
+
+int main(int argc, char *argv[])
+{
+	
+	unsigned in[2];
+	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
+	unsigned char iv[8];
+	hexToAsciiString(argv[1], iv);
+	//hexToAsciiString("3030303030303030", iv);
+	printf("IV = %s\n", iv);
+	// printf("After IV\n\n");
+	unsigned char desKey[8];
+	hexToAsciiString(argv[2], desKey);
+	printf("desKey = %s\n", desKey);
+	char *readFileName = argv[3];
+	char *writeFileName = argv[4];
+	FILE *fp, *fp2;
+
+	unsigned char buff[10000];
+	fp = fopen(readFileName, "r");
+	fp2 = fopen(writeFileName, "w+");
+
+	fscanf(fp, "%s", buff);
+	int k;
+	des_key_schedule key;
+	
+	if ((k = des_set_key_checked(&desKey, key)) != 0)
+	{
+		printf("\nkey error\n");
+	}
+
+	CBC_Encription(0,iv,fp2,key,buff);
+
+	
+	//  printf("\n1 : %s\n", buff );
+	//fprintf(fp2, "This is testing for fprintf...\n");
+
+
+	// des_encrypt1(xor, key, DEC);
+	// for (int i = 0; i < LENGTH; ++i)
+	// {
+	// 	input[i] = (char)(iv[i] ^ xor[i]);
+	// }
+
+	// printf("DES Decryption: ");
+	// printf("%s\n", input);
 
 	fclose(fp);
 	fclose(fp2);
