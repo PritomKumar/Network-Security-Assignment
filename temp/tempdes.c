@@ -43,29 +43,24 @@ int hex_to_ascii(char c, char d)
 	// printf("\nhigh = %d low = %d  \n", high, low);
 	return high + low;
 }
-unsigned char *hexToAsciiString(char *hexString)
+unsigned char *hexToAsciiString(char *hexString, char *array)
 {
 
-	char *st = NULL ;	
-	printf("Before st\n\n");
+	char *st = NULL;
+	// printf("Before st\n\n");
 	st = hexString;
 	unsigned char ascii[8];
 	unsigned char ascii2[8];
 	int length = strlen(st);
-	printf("Before for loop\n\n");
+	// printf("Before for loop\n\n");
 
 	for (int i = 0, j = 0; i < length - 1; i += 2, j++)
 	{
 		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
-		ascii[j] = c;
+		array[j] = c;
 	}
-	printf("After for loop\n\n");
-	for (int i = 0; i < 8; i++)
-	{
-		ascii2[i] = ascii[i];
-	}
-	
-	
+	// printf("After for loop\n\n");
+	// printf("ascii = %s\n", ascii);
 	return ascii;
 }
 
@@ -75,11 +70,13 @@ int main(int argc, char *argv[])
 	unsigned in[2];
 	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
 	unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
-	unsigned char *iv = hexToAsciiString(argv[1]);
+	unsigned char iv[8];
+	hexToAsciiString(argv[1], iv);
 	printf("IV = %s\n", iv);
-	printf("After IV\n\n");
-	unsigned char *desKey = hexToAsciiString(argv[2]);
-	printf("desKey = %s\n", iv);
+	// printf("After IV\n\n");
+	unsigned char desKey[8];
+	hexToAsciiString(argv[2], desKey);
+	printf("desKey = %s\n", desKey);
 	char *readFileName = argv[3];
 	char *writeFileName = argv[4];
 	FILE *fp, *fp2;
@@ -93,13 +90,16 @@ int main(int argc, char *argv[])
 	//fprintf(fp2, "This is testing for fprintf...\n");
 
 	int LENGTH = 8;
-	const char  plainone[16] = "PlainOne";
-	const char  plaintwo[16] = "PlainTwo";
-	char xor [8];
+	const char plainone[16] = "PlainOne";
+	const char plaintwo[16] = "PlainTwo";
+	char xor[8];
+	int temp[8];
 	int i;
 
 	for (i = 0; i < LENGTH; ++i)
-		xor[i] = (char)(iv[i] ^ input[i]);
+	{
+		xor[i] = (char)(desKey[i] ^ input[i]);
+	}
 	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", desKey, input);
 	for (i = 0; i < LENGTH; i++)
 		printf("%c", xor[i]);
