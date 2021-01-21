@@ -45,27 +45,28 @@ int hex_to_ascii(char c, char d)
 }
 unsigned char *hexToAsciiString(char *hexString)
 {
-	char *st = hexString;
-	static unsigned char ascii[8];
+
+	char *st = NULL ;	
+	printf("Before st\n\n");
+	st = hexString;
+	unsigned char ascii[8];
+	unsigned char ascii2[8];
 	int length = strlen(st);
-	int i;
-	char buf = st[0];
+	printf("Before for loop\n\n");
+
 	for (int i = 0, j = 0; i < length - 1; i += 2, j++)
 	{
-		// printf( "buf =  %c\n ",buf);
-		// printf("%c", (unsigned char)hex_to_ascii(st[i], st[i + 1]));
-		// printf(" %d ", hex_to_ascii(buf, st[i]));
 		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
 		ascii[j] = c;
 	}
-	// printf("\n");
-	// for (int i = 0; i < 8; i++)
-	// {
-	// 	printf("%c", ascii[i]);
-	// }
-	// printf("FUctions = %s\n",ascii);
-
-	return &ascii;
+	printf("After for loop\n\n");
+	for (int i = 0; i < 8; i++)
+	{
+		ascii2[i] = ascii[i];
+	}
+	
+	
+	return ascii;
 }
 
 int main(int argc, char *argv[])
@@ -75,7 +76,10 @@ int main(int argc, char *argv[])
 	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
 	unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned char *iv = hexToAsciiString(argv[1]);
+	printf("IV = %s\n", iv);
+	printf("After IV\n\n");
 	unsigned char *desKey = hexToAsciiString(argv[2]);
+	printf("desKey = %s\n", iv);
 	char *readFileName = argv[3];
 	char *writeFileName = argv[4];
 	FILE *fp, *fp2;
@@ -95,10 +99,10 @@ int main(int argc, char *argv[])
 	int i;
 
 	for (i = 0; i < LENGTH; ++i)
-		xor[i] = (char)(iv[i] ^ desKey[i]);
-	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", iv, desKey);
-	for (i = 0; i < LENGTH; ++i)
-		printf("%02X ", xor[i]);
+		xor[i] = (char)(iv[i] ^ input[i]);
+	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", desKey, input);
+	for (i = 0; i < LENGTH; i++)
+		printf("%c", xor[i]);
 	printf("\n");
 
 	des_key_schedule key;
