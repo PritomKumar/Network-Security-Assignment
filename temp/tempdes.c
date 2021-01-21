@@ -54,7 +54,7 @@ unsigned char *hexToAsciiString(char *hexString, char *array)
 	int length = strlen(st);
 	// printf("Before for loop\n\n");
 
-	for (int i = 0, j = 0; i < length - 1; i += 2, j++)
+	for (int i = 0, j = 0; i < length; i += 2, j++)
 	{
 		unsigned char c = (unsigned char)hex_to_ascii(st[i], st[i + 1]);
 		array[j] = c;
@@ -99,10 +99,18 @@ int main(int argc, char *argv[])
 	for (i = 0; i < LENGTH; ++i)
 	{
 		xor[i] = (char)(desKey[i] ^ input[i]);
+		temp[i] = (int)xor[i];
 	}
+
 	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", desKey, input);
-	for (i = 0; i < LENGTH; i++)
+	for (i = 0; i < LENGTH; i++){
 		printf("%c", xor[i]);
+	}
+	printf("\n");
+	for (i = 0; i < LENGTH; i++){
+		printf("%d", temp[i]);
+	}
+		
 	printf("\n");
 
 	des_key_schedule key;
