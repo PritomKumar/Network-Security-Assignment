@@ -131,13 +131,13 @@ void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsi
 
 	des_encrypt1(xor, key, ENC);
 	fprintf(fp2,"%s",xor);
-	printf("DES Encryption: ");
-	printf("%s\n", xor);
-	for (int i = 0; i < LENGTH; i++)
-	{
-		printf("%hhx", xor[i]);
-	}
-	printf("\n");
+	// printf("DES Encryption: ");
+	// printf("%s\n", xor);
+	// for (int i = 0; i < LENGTH; i++)
+	// {
+	// 	printf("%hhx", xor[i]);
+	// }
+	// printf("\n");
 
 	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
 	{
@@ -147,7 +147,7 @@ void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsi
 
 }
 
-void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
+void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *buff,int fileLenght){
 	
 	//printf("Inside func %s\n", desKey);
 	if(startPoint >= fileLenght){
@@ -162,7 +162,7 @@ void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsig
 	int LENGTH = 8;
 
 	char xor[8];
-	int temp[8];
+	char temp[8];
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned  char input[8];
 
@@ -175,13 +175,13 @@ void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsig
 
 	des_encrypt1(input, key, DEC);
 	//fprintf(fp2,"%s",xor);
-	printf("DES Decryption: ");
-	printf("%s\n", xor);
-	for (int i = 0; i < LENGTH; i++)
-	{
-		printf("%hhx", xor[i]);
-	}
-	printf("\n");
+	// printf("DES Decryption: ");
+	// printf("%s\n", input);
+	// for (int i = 0; i < LENGTH; i++)
+	// {
+	// 	printf("%hhx", input[i]);
+	// }
+	// printf("\n");
 
 
 	// printf("\nInput = ");
@@ -214,7 +214,7 @@ void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsig
 		decryptedMessage[i] = xor[j];
 	}
 
-	CBC_Decrytion(startPoint+8,xor,fp2,key,buff,fileLenght);
+	CBC_Decrytion(startPoint+8,temp,key,buff,fileLenght);
 
 }
 
@@ -284,14 +284,18 @@ int main(int argc, char *argv[])
 		buffDecrypt[i] = '0';
 	}
 	
-
 	for (int i=0;i<fileLenght;i++)  
 	{ 
-		ch = getc(fp2); 
-		buffDecrypt[i] = (char) ch;
+		buffDecrypt[i] = encryptedMessage[i];
 	} 
 
-	CBC_Decrytion(0,iv,fp2,key,buffDecrypt,fileLenght);
+	CBC_Decrytion(0,iv,key,buffDecrypt,fileLenght);
+
+	printf("\nDecrypted Message = ");
+	for (int i = 0; i < fileLenght; ++i){
+		printf("%c",decryptedMessage[i]);
+	}
+	printf("\n");
 	//  printf("\n1 : %s\n", buff );
 	//fprintf(fp2, "This is testing for fprintf...\n");
 
