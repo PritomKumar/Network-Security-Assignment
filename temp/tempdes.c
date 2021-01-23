@@ -81,13 +81,12 @@ void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsi
 	if(startPoint >= fileLenght){
 		return;
 	}
-	printf("\nBuff = ");
-	for (int i = 0; i < fileLenght; ++i){
-		printf("%c",buff[i]);
-	}
-	printf("\n");
-	unsigned char *desKeyCopy  = NULL;
-	printf("Start Point = %d\n", startPoint);
+	// printf("\nBuff = ");
+	// for (int i = 0; i < fileLenght; ++i){
+	// 	printf("%c",buff[i]);
+	// }
+	// printf("\n");
+	// printf("Start Point = %d\n", startPoint);
 	int LENGTH = 8;
 
 	char xor[8];
@@ -101,30 +100,30 @@ void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsi
 		input[j] = buff[i];
 		temp[j] = input[j];
 	}
-	printf("\nInput = ");
-	for (int i = 0; i < 8; ++i){
-		printf("%c",input[i]);
-	}
-	printf("\n\nstartpoint = %d and input = %s\n\n",startPoint,input);
+	// printf("\nInput = ");
+	// for (int i = 0; i < 8; ++i){
+	// 	printf("%c",input[i]);
+	// }
+	// printf("\n\nstartpoint = %d and input = %s\n\n",startPoint,input);
 	for (int i = 0; i < LENGTH; ++i)
 	{
 		xor[i] = (char)(iv[i] ^ input[i]);
 	}
 
-	printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", iv, input);
-	for (int i = 0; i < LENGTH; i++)
-	{
-		printf("%c", xor[i]);
-	}
-	printf("\n");
-	for (int i = 0; i < LENGTH; i++)
-	{
-		printf("%hhx", temp[i]);
-	}
-	printf("\n");
+	// printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", iv, input);
+	// for (int i = 0; i < LENGTH; i++)
+	// {
+	// 	printf("%c", xor[i]);
+	// }
+	// printf("\n");
+	// for (int i = 0; i < LENGTH; i++)
+	// {
+	// 	printf("%hhx", temp[i]);
+	// }
+	// printf("\n");
 
-	printf("DES Clear Text: ");
-	printf("%s\n", input);
+	// printf("DES Clear Text: ");
+	// printf("%s\n", input);
 
 	des_encrypt1(xor, key, ENC);
 	fprintf(fp2,"%s",xor);
@@ -194,6 +193,8 @@ int main(int argc, char *argv[])
 	}
 
 	CBC_Encription(0,iv,fp2,key,buff,fileLenght);
+
+	
 
 	
 	//  printf("\n1 : %s\n", buff );
