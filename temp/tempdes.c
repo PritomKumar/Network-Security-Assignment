@@ -221,8 +221,13 @@ void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *
 int main(int argc, char *argv[])
 {
 	
-	unsigned in[2];
-	static unsigned char cbc_key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
+	if(argc!=5){
+		printf("Please provide the required number of parameter.\n");
+		printf("You should use the following format:------.\n");
+		printf("\nProgram\t\tIV(Hexadicimal)\t\tKey(Hexadicimal)\t\tInputFile\tOutputFile\n\n");
+		printf("Exiting....\n");
+		exit(1);
+	}
 	unsigned char iv[8];
 	hexToAsciiString(argv[1], iv);
 	//hexToAsciiString("3030303030303030", iv);
@@ -247,6 +252,7 @@ int main(int argc, char *argv[])
 
 	int ch = getc(fp); 
 	buff[0] = (char) ch;
+	printf("\nMessage = ");
 	int fileLenght = 0;
 	for (int i=0;ch != EOF;i++)  
 	{ 
@@ -255,20 +261,21 @@ int main(int argc, char *argv[])
 		putchar(ch);  
 		ch = getc(fp); 
 	} 
+	printf("\n");
 
 	if(fileLenght%8!=0){
 		fileLenght = fileLenght + (8-fileLenght%8);
 	}
 
 	//fscanf(fp, "%s", buff);
-	printf("\nfile Lenght = %d\n", fileLenght );
+	//printf("\nfile Lenght = %d\n", fileLenght );
 	//printf("\n1 : %s\n", buff );
 	int k;
 	des_key_schedule key;
 	
 	if ((k = des_set_key_checked(&desKey, key)) != 0)
 	{
-		printf("\nkey error\n");
+		printf("\nKey error\n");
 	}
 
 	CBC_Encription(0,iv,fp2,key,buff,fileLenght);
@@ -295,7 +302,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < fileLenght; ++i){
 		printf("%c",decryptedMessage[i]);
 	}
-	printf("\n");
+	printf("\n\n");
 	//  printf("\n1 : %s\n", buff );
 	//fprintf(fp2, "This is testing for fprintf...\n");
 
