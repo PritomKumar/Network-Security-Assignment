@@ -1,4 +1,3 @@
-#include <openssl/des.h>
 
 #include <openssl/des.h>
 #include <stdio.h>
@@ -6,6 +5,11 @@
 
 #define ENC 1
 #define DEC 0
+
+
+unsigned char encryptedMessage[10000];
+unsigned char decryptedMessage[10000];
+
 
 int hex_to_int(char c)
 {
@@ -76,8 +80,6 @@ void hexToAsciiString(char *hexString, char *array)
 	}
 }
 
-unsigned char encryptedMessage[10000];
-unsigned char decryptedMessage[10000];
 
 void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
 	
@@ -162,7 +164,7 @@ void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *
 	int LENGTH = 8;
 
 	char xor[8];
-	char temp[8];
+	char cypherText[8];
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
 	unsigned  char input[8];
 
@@ -170,7 +172,7 @@ void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *
 	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
 	{
 		input[j] = buff[i];
-		temp[j] = input[j];
+		cypherText[j] = input[j];
 	}
 
 	des_encrypt1(input, key, DEC);
@@ -189,6 +191,7 @@ void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *
 	// 	printf("%c",input[i]);
 	// }
 	// printf("\n\nstartpoint = %d and input = %s\n\n",startPoint,input);
+	
 	for (int i = 0; i < LENGTH; ++i)
 	{
 		xor[i] = (char)(iv[i] ^ input[i]);
@@ -202,7 +205,7 @@ void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *
 	// printf("\n");
 	// for (int i = 0; i < LENGTH; i++)
 	// {
-	// 	printf("%hhx", temp[i]);
+	// 	printf("%hhx", cypherText[i]);
 	// }
 	// printf("\n");
 
@@ -214,7 +217,7 @@ void CBC_Decrytion(int startPoint, char *iv,des_key_schedule key,unsigned char *
 		decryptedMessage[i] = xor[j];
 	}
 
-	CBC_Decrytion(startPoint+8,temp,key,buff,fileLenght);
+	CBC_Decrytion(startPoint+8,cypherText,key,buff,fileLenght);
 
 }
 
@@ -246,7 +249,6 @@ int main(int argc, char *argv[])
 		buff[i] = '0';
 	}
 	
-
 	fp = fopen(readFileName, "r");
 	fp2 = fopen(writeFileName, "r+");
 
