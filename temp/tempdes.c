@@ -78,7 +78,7 @@ void hexToAsciiString(char *hexString, char *array)
 void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
 	
 	//printf("Inside func %s\n", desKey);
-	if(startPoint > fileLenght){
+	if(startPoint >= fileLenght){
 		return;
 	}
 	printf("\nBuff = ");
@@ -93,13 +93,13 @@ void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsi
 	char xor[8];
 	int temp[8];
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
-	static unsigned  char input[8];
+	 unsigned  char input[8];
 
 	//unsigned char testKey[8] = "pritom19";
-	for (int i = startPoint; i < startPoint + 8; i++)
+	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
 	{
-		input[i] = buff[i];
-		temp[i] = input[i];
+		input[j] = buff[i];
+		temp[j] = input[j];
 	}
 	printf("\nInput = ");
 	for (int i = 0; i < 8; ++i){
@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 		printf("\nkey error\n");
 	}
 
-	CBC_Encription(8,iv,fp2,key,buff,fileLenght);
+	CBC_Encription(0,iv,fp2,key,buff,fileLenght);
 
 	
 	//  printf("\n1 : %s\n", buff );
