@@ -77,6 +77,8 @@ void hexToAsciiString(char *hexString, char *array)
 }
 
 unsigned char encryptedMessage[10000];
+unsigned char decryptedMessage[10000];
+
 void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
 	
 	//printf("Inside func %s\n", desKey);
@@ -162,7 +164,7 @@ void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsig
 	char xor[8];
 	int temp[8];
 	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
-	 unsigned  char input[8];
+	unsigned  char input[8];
 
 	//unsigned char testKey[8] = "pritom19";
 	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
@@ -170,6 +172,18 @@ void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsig
 		input[j] = buff[i];
 		temp[j] = input[j];
 	}
+
+	des_encrypt1(input, key, DEC);
+	//fprintf(fp2,"%s",xor);
+	printf("DES Decryption: ");
+	printf("%s\n", xor);
+	for (int i = 0; i < LENGTH; i++)
+	{
+		printf("%hhx", xor[i]);
+	}
+	printf("\n");
+
+
 	// printf("\nInput = ");
 	// for (int i = 0; i < 8; ++i){
 	// 	printf("%c",input[i]);
@@ -195,17 +209,12 @@ void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsig
 	// printf("DES Clear Text: ");
 	// printf("%s\n", input);
 
-	des_encrypt1(xor, key, ENC);
-	fprintf(fp2,"%s",xor);
-	printf("DES Encryption: ");
-	printf("%s\n", xor);
-	for (int i = 0; i < LENGTH; i++)
+	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
 	{
-		printf("%hhx", xor[i]);
+		decryptedMessage[i] = xor[j];
 	}
-	printf("\n");
 
-	CBC_Encription(startPoint+8,xor,fp2,key,buff,fileLenght);
+	CBC_Decrytion(startPoint+8,xor,fp2,key,buff,fileLenght);
 
 }
 
@@ -275,7 +284,14 @@ int main(int argc, char *argv[])
 		buffDecrypt[i] = '0';
 	}
 	
-	
+
+	for (int i=0;i<fileLenght;i++)  
+	{ 
+		ch = getc(fp2); 
+		buffDecrypt[i] = (char) ch;
+	} 
+
+	CBC_Decrytion(0,iv,fp2,key,buffDecrypt,fileLenght);
 	//  printf("\n1 : %s\n", buff );
 	//fprintf(fp2, "This is testing for fprintf...\n");
 
