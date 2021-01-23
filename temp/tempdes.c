@@ -76,11 +76,14 @@ void hexToAsciiString(char *hexString, char *array)
 	}
 }
 
-void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff){
+void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
 	
 	//printf("Inside func %s\n", desKey);
-
+	if(startPoint >= fileLenght){
+		return;
+	}
 	unsigned char *desKeyCopy  = NULL;
+	printf("Start Point = %d\n", startPoint);
 	int LENGTH = 8;
 
 	char xor[8];
@@ -124,7 +127,7 @@ void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsi
 	}
 	printf("\n");
 
-	CBC_Encription(startPoint+8,xor,fp2,key,buff);
+	CBC_Encription(startPoint+8,xor,fp2,key,buff,fileLenght);
 
 }
 
@@ -149,7 +152,20 @@ int main(int argc, char *argv[])
 	fp = fopen(readFileName, "r");
 	fp2 = fopen(writeFileName, "w+");
 
-	fscanf(fp, "%s", buff);
+	int ch = getc(fp); 
+	buff[0] = (char) ch;
+	int fileLenght = 0;
+	for (int i=1;ch != EOF;i++)  
+	{ 
+		buff[i] = (char) ch;
+		fileLenght = i;
+		putchar(ch);  
+		ch = getc(fp); 
+	} 
+
+	//fscanf(fp, "%s", buff);
+	printf("\nfile Lenght = %d\n", fileLenght );
+	printf("\n1 : %s\n", buff );
 	int k;
 	des_key_schedule key;
 	
@@ -158,7 +174,7 @@ int main(int argc, char *argv[])
 		printf("\nkey error\n");
 	}
 
-	CBC_Encription(0,iv,fp2,key,buff);
+	CBC_Encription(0,iv,fp2,key,buff,fileLenght);
 
 	
 	//  printf("\n1 : %s\n", buff );
