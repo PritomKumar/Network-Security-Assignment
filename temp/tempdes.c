@@ -75,7 +75,77 @@ void hexToAsciiString(char *hexString, char *array)
 		array[j] = c;
 	}
 }
+
+unsigned char encryptedMessage[10000];
 void CBC_Encription(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
+	
+	//printf("Inside func %s\n", desKey);
+	if(startPoint >= fileLenght){
+		return;
+	}
+	// printf("\nBuff = ");
+	// for (int i = 0; i < fileLenght; ++i){
+	// 	printf("%c",buff[i]);
+	// }
+	// printf("\n");
+	// printf("Start Point = %d\n", startPoint);
+	int LENGTH = 8;
+
+	char xor[8];
+	int temp[8];
+	//unsigned char input[8] = {'p', 'r', 'i', 't', 'o', 'm', '1', '9'};
+	 unsigned  char input[8];
+
+	//unsigned char testKey[8] = "pritom19";
+	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
+	{
+		input[j] = buff[i];
+		temp[j] = input[j];
+	}
+	// printf("\nInput = ");
+	// for (int i = 0; i < 8; ++i){
+	// 	printf("%c",input[i]);
+	// }
+	// printf("\n\nstartpoint = %d and input = %s\n\n",startPoint,input);
+	for (int i = 0; i < LENGTH; ++i)
+	{
+		xor[i] = (char)(iv[i] ^ input[i]);
+	}
+
+	// printf("PlainText One: %s\nPlainText Two: %s\n\none^two: ", iv, input);
+	// for (int i = 0; i < LENGTH; i++)
+	// {
+	// 	printf("%c", xor[i]);
+	// }
+	// printf("\n");
+	// for (int i = 0; i < LENGTH; i++)
+	// {
+	// 	printf("%hhx", temp[i]);
+	// }
+	// printf("\n");
+
+	// printf("DES Clear Text: ");
+	// printf("%s\n", input);
+
+	des_encrypt1(xor, key, ENC);
+	fprintf(fp2,"%s",xor);
+	printf("DES Encryption: ");
+	printf("%s\n", xor);
+	for (int i = 0; i < LENGTH; i++)
+	{
+		printf("%hhx", xor[i]);
+	}
+	printf("\n");
+
+	for (int i = startPoint,j=0; i < startPoint + LENGTH; i++,j++)
+	{
+		encryptedMessage[i] = xor[j];
+	}
+	CBC_Encription(startPoint+8,xor,fp2,key,buff,fileLenght);
+
+}
+
+void CBC_Decrytion(int startPoint, char *iv,FILE *fp2,des_key_schedule key,unsigned char *buff,int fileLenght){
 	
 	//printf("Inside func %s\n", desKey);
 	if(startPoint >= fileLenght){
@@ -194,8 +264,17 @@ int main(int argc, char *argv[])
 
 	CBC_Encription(0,iv,fp2,key,buff,fileLenght);
 
+	printf("\nEncryted Message = ");
+	for (int i = 0; i < fileLenght; ++i){
+		printf("%c",encryptedMessage[i]);
+	}
+	printf("\n");
+	unsigned char buffDecrypt[10000];
+	for (int i = 0; i < 10000; i++)
+	{
+		buffDecrypt[i] = '0';
+	}
 	
-
 	
 	//  printf("\n1 : %s\n", buff );
 	//fprintf(fp2, "This is testing for fprintf...\n");
